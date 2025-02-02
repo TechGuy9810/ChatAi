@@ -166,7 +166,10 @@ if (result.modifiedCount > 0) {
   res.status(500).send("Error fetching chat!");
 }
 });
-
+app.use(express.static(path.join(__dirname,"../client/dist")))
+app.get("*",(req,res)=>{
+    res.sendFile(path.join(__dirname,"../client","dist","index.html"));
+})
 app.listen(process.env.PORT,()=>{
   connect();
     console.log(`server is running on port ${process.env.PORT}`)
