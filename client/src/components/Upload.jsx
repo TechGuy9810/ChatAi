@@ -5,7 +5,7 @@ const urlEndpoint = import.meta.env.VITE_IMAGE_KIT;
 const publicKey = import.meta.env.VITE_IMAGE_PUBLIC_KEY; 
 const authenticator =  async () => {
     try {
-        const response = await fetch('http://localhost:5000/api/upload');
+        const response = await fetch('https://chatai-production-647b.up.railway.app//api/upload');
 
         if (!response.ok) {
             const errorText = await response.text();
