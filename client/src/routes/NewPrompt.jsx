@@ -4,6 +4,7 @@ import { IKImage } from 'imagekitio-react';
 import model from '../lib/gemini.js';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import ReactMarkdown from "react-markdown";
+import { FaXmark } from "react-icons/fa6";
 const NewPrompt = ({data}) => {
   const [img,setImg] = useState({
     isLoading:false,
@@ -24,7 +25,15 @@ endRef.current.scrollIntoView({behavior:"smooth"});
       { role: "user", parts: [{ text: "What is AI?" }] }
     ]
   });
-
+  const handlePic = () => {
+    setImg({
+      isLoading: false,
+      error: "",
+      dbData: {},
+      aiData: {},
+    });
+    resetRef.current.reset();
+  };
 //mutation
 const queryClient = useQueryClient()
 const mutation = useMutation({
@@ -84,12 +93,15 @@ const handleSubmit = async(e)=>{
   return (
     <>      
         {img.dbData?.filePath &&(
+        <div className='relative h-[20%] w-[15%]'>
+        <FaXmark className='text-white font-bold lg:text-2xl text-lg absolute top-[5%] right-[5%] cursor-pointer p-1 rounded-full bg-gray-700' onClick={handlePic}/>
         <IKImage
         urlEndpoint={import.meta.env.VITE_IMAGE_KIT}
         path={img.dbData?.filePath}
         transformation={[{ height: 200, width: 200 }]}
         className="w-full h-auto rounded-lg border-2 border-white"
       />
+      </div>
       )}
       {question&&(
         <div className='text-white max-w-[80%] p-2 bg-slate-600 rounded-lg self-end '>{question}</div>

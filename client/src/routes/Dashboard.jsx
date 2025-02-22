@@ -17,7 +17,7 @@ const Dashboard = () => {
   const [question,setQuestion] = useState('');
   const [answer,setAnswer] = useState('');
   const resetRef = useRef();
-
+const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const queryClient = useQueryClient()
   const chat = model.startChat({
@@ -56,6 +56,7 @@ const mutation = useMutation({
   const add = async (text) => {
     setQuestion(text); // Set the question
     try {
+      setLoading(true);
       const result = await chat.sendMessage(
         Object.keys(img.aiData).length > 0 ? [img.aiData, text] : [text]
       );
@@ -71,6 +72,7 @@ const mutation = useMutation({
     } catch (err) {
       console.log(err);
     }
+    setLoading(false);
   };
   const handlePic = () => {
     setImg({
@@ -89,7 +91,15 @@ const mutation = useMutation({
     resetRef.current.reset();
     }
   return (
-    <div className='bg-none rounded-lg h-full w-full flex flex-col lg:justify-center justify-end items-center'>
+    <>
+    {loading ?(
+      <div className='h-full w-full flex justify-center items-center'>
+            <span className="text-2xl lg:text-3xl font-bold text-slate-300 animate-pulse">
+      Loading...
+    </span>
+      </div>
+    ):(
+      <div className='bg-none rounded-lg h-full w-full flex flex-col lg:justify-center justify-center items-center'>
       <div className="texts w-[60%] h-[30%] lg:pt-2 lg:pb-2 p-0 lg:flex hidden">
         <div className="options flex flex-row items-center h-full w-full justify-evenly">
           <div className="option w-full h-full p-4 flex flex-col items-center hover:bg-slate-700 justify-center rounded-lg cursor-pointer">
@@ -141,6 +151,8 @@ const mutation = useMutation({
 </form>
       </div>
     </div>
+    )}
+    </>
   )
 }
 
